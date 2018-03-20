@@ -1,78 +1,75 @@
-module.exports = function (app) {
+module.exports = function(app) {
+
+  //POST calls
   app.post("/api/website/:websiteId/page", createPage);
+  //Get calls
   app.get("/api/website/:websiteId/page", findAllPagesForWebsite);
   app.get("/api/page/:pageId", findPageById);
+  //Put calls
   app.put("/api/page/:pageId", updatePage);
+  //Delete calls
   app.delete("/api/page/:pageId", deletePage);
 
   var pages = [
-    { "_id": "321", "name": "Post 1", "websiteId": "456", "title": "Lorem" },
-    { "_id": "432", "name": "Post 2", "websiteId": "456", "title": "Lorem" },
-    { "_id": "543", "name": "Post 3", "websiteId": "456", "title": "Lorem" },
-    { "_id": "654", "name": "Post 1", "websiteId": "789", "title": "Lorem" },
-    { "_id": "765", "name": "Post 2", "websiteId": "789", "title": "Lorem" },
-    { "_id": "876", "name": "Post 3", "websiteId": "789", "title": "Lorem" }
+    {'_id': '321', 'name': 'Post 1', 'websiteId': '333', 'title': 'Lorem'},
+    {'_id': '4', 'name': 'Post 2', 'websiteId': '333', 'title': 'Lorem'},
+    {'_id': '5', 'name': 'Post 3', 'websiteId': '333', 'title': 'Lorem'},
+    {'_id': '1', 'name': 'Post 4', 'websiteId': '3', 'title': 'Lorem'},
+    {'_id': '2', 'name': 'Post 5', 'websiteId': '2', 'title': 'Lorem'}
   ];
 
   function createPage(req, res) {
-    var websiteId = req.params['websiteId'];
-    var pageId = '' + Math.round(Math.random() * 1000);
-
-    var new_page = {
-      _id: pageId,
-      name: req.body.name,
-      websiteId: websiteId,
-      title: req.body.title
-    };
-
-    pages.push(new_page);
-    res.json(new_page);
+    var createdPage = req.body;
+    createdPage._id = new Date().getTime().toString();
+    pages.push(createdPage);
+    res.json(createdPage);
   }
 
   function findAllPagesForWebsite(req, res) {
-    var websiteId = req.params['websiteId'];
-
-    var pagesByWebsite = pages.filter(function (page) {
-      return page.websiteId === websiteId;
-    });
-    res.json(pagesByWebsite);
+    var resultSet = [];
+    var websiteId = req.params["websiteId"];
+    for(var i = 0; i < pages.length; i++) {
+      if (pages[i].websiteId === websiteId) {
+        resultSet.push(pages[i]);
+      }
+    }
+    res.json(resultSet);
   }
 
-  function findPageById(req, res) {
-    var pageId = req.params['pageId'];
-
-    var page = pages.find(function (page) {
+  function findPageById(req, res){
+    var pageId = req.params["pageId"];
+    var foundPage = pages.find(function (page) {
       return page._id === pageId;
     });
-    res.json(page);
+    if (foundPage){
+      res.json(foundPage);
+    } else {
+      res.status(401);
+      res.json(foundPage);
+    }
   }
 
   function updatePage(req, res) {
-    var pageId = req.params['pageId'];
+    var pageId = req.params["pageId"];
+    var foundPage = pages.find(function (page) {
+      return page._id === pageId;
+    });
     var page = req.body;
-
-    for (var i = 0; i < pages.length; i++) {
-      if (pages[i]._id === pageId) {
-        pages[i].websiteId = page.websiteId;
-        pages[i].name = page.name;
-        pages[i].title = page.title;
-
-        res.json(pages[i]);
-        return;
-      }
-    }
-    res.status(400).send("not found!");
+    foundPage.name = page.name;
+    foundPage.websiteId = page.websiteId;
+    foundPage.title = page.title;
+    res.json(foundPage);
   }
 
   function deletePage(req, res) {
-    var pageId = req.params['pageId'];
-
-    for (var i = 0; i < pages.length; i++) {
-      if (pages[i] === pageId) {
+    var pageId = req.params["pageId"];
+    for (const i in pages) {
+      if (pages[i]._id === pageId) {
         const j = +i;
         pages.splice(j, 1);
       }
     }
-    res.json({});
+    res.send("success");
   }
+
 };

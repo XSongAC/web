@@ -1,40 +1,40 @@
 module.exports = function (app) {
-  app.post("/api/user/:userId/website", createWebsite);
-  app.get("/api/user/:userId/website", findAllWebsitesForUser);
-  app.get("/api/website/:websiteId", findWebsiteById);
-  app.put("/api/website/:websiteId", updateWebsite);
-  app.delete("/api/website/:websiteId", deleteWebsite);
+
+  //Post calls
+  app.post('/api/user/:userId/website', createWebsite);
+  //Get calls
+  app.get('/api/user/:userId/website', findAllWebsitesForUser);
+  app.get('/api/website/:websiteId', findWebsiteById);
+  //Put calls
+  app.put('/api/website/:websiteId',updateWebsite);
+  //Delete calls
+  app.delete('/api/website/:websiteId', deleteWebsite);
 
   var websites = [
-    { "_id": "123", "name": "Facebook", "developerId": "456", "description": "Lorem" },
-    { "_id": "234", "name": "Tweeter", "developerId": "456", "description": "Lorem" },
-    { "_id": "456", "name": "Gizmodo", "developerId": "456", "description": "Lorem" },
-    { "_id": "890", "name": "Go", "developerId": "123", "description": "Lorem" },
-    { "-id": "567", "name": "Tic Tac Toe", "developerId": "123", "description": "Lorem" },
-    { "_id": "678", "name": "Checkers", "developerId": "123", "description": "Lorem" },
-    { "_id": "789", "name": "Chess", "developerId": "234", "description": "Lorem" }
+    { _id: '333', name: 'Facebook',    developId: '123', description: 'Lorem' },
+    { _id: '2', name: 'Tweeter',     developId: '123', description: 'Lorem' },
+    { _id: '4', name: 'Gizmodo',     developId: '123', description: 'Lorem' },
+    { _id: '8', name: 'Go',          developId: '321', description: 'Lorem' },
+    { _id: '5', name: 'Tic Tac Toe', developId: '321', description: 'Lorem' },
   ];
 
   function createWebsite(req, res) {
-    var userId = req.params['userId'];
-    var websiteId = '' + Math.round(Math.random() * 1000);
-
-    var new_website = {
-      _id: websiteId,
-      name: req.body.name,
-      developerId: userId,
-      description: req.body.description
-    };
-    websites.push(new_website);
-    res.json(new_website);
+    var website = req.body;
+    website._id = new Date().getTime().toString();
+    websites.push(website);
+    res.json(website);
   }
 
   function findAllWebsitesForUser(req, res) {
     var userId = req.params['userId'];
-    var websitesByUser = websites.filter(function (website) {
-      return website.developerId === userId;
-    });
-    res.json(websitesByUser);
+    var results = [];
+    for (w in websites) {
+      var website = websites[w];
+      if (website.developId === userId) {
+        results.push(website);
+      }
+    }
+    res.send(results);
   }
 
   function findWebsiteById(req, res) {
@@ -51,26 +51,25 @@ module.exports = function (app) {
 
     for (var i = 0; i < websites.length; i++) {
       if (websites[i]._id === websiteId) {
-        websites[i].name = website.name;
-        websites[i].developerId = website.developerId;
         websites[i].description = website.description;
-
-        res.json(websites[i]);
+        websites[i].name = website.name;
+        websites[i].developId = website.developId;
+        res.status(200).send(website);
         return;
       }
     }
-    res.status(404).send("not found!");
+    res.status(404).send('Not find!');
   }
 
   function deleteWebsite(req, res) {
     var websiteId = req.params['websiteId'];
-
     for (var i = 0; i < websites.length; i++) {
       if (websites[i]._id === websiteId) {
-        const j = +i;
-        websites.splice(j, 1);
+        websites.splice(i,1);
+        res.sendStatus(200);
+        return;
       }
     }
-    res.json({});
+    res.sendStatus(404);
   }
-};
+}

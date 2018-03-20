@@ -16,13 +16,13 @@ module.exports = function(app) {
   app.delete("/api/widget/:widgetId", deleteWidget);
 
   var widgets = [
-  {_id: '123', type: 'HEADER', pageId: '321',size:  '2', text:'GOP Releases Formerly Classified Memo Critical Of FBI' },
-  {_id: '234', type: 'HEADER', pageId: '321',size: '4', text: 'It hints at a new GOP target: deputy attorney general' },
+  {_id: '123', type: 'HEADER', pageId: '321',size:  '2', text:'PUBG 2018 Roadmap, When we came out of Steam Early Access' },
+  {_id: '234', type: 'HEADER', pageId: '321',size: '4', text: 'Each of these major updates will bring changes to specific systems and/or introduce new content' },
   {_id: '345', type: 'IMAGE', pageId: '321',size:  '2',text: 'text', width:'100%',
-    url: 'https://media.fox5dc.com/media.fox5dc.com/photo/2018/02/01/trump_classified_1517500733623_4880181_ver1.0_640_360.jpg'},
-  {_id: '456', type: 'HTML', pageId: '321',size: '2', text: '<p>blalbla</p>' },
-  {_id: '567', type: 'HEADER', pageId: '321', size: '4', text: 'Memo asserts bias on part of FBI investigation in Russia probe'},
-  {_id: '678', type: 'YOUTUBE', pageId: '321', size: '2',text:  'text', width: '100%', url: 'https://www.youtube.com/embed/I84wnvEqGXc'},
+    url: 'https://d1wfiv6sf8d64f.cloudfront.net/static/pc/img/visual_main.jpg'},
+  {_id: '456', type: 'HTML', pageId: '321',size: '2', text: 'T and for you to have a real impact on how our game changes and develops going forward' },
+  {_id: '567', type: 'HEADER', pageId: '321', size: '4', text: 'It is also our aim to continually upgrade the game’s aesthetic side, '},
+  {_id: '678', type: 'YOUTUBE', pageId: '321', size: '2',text:  'text', width: '100%', url: 'https://www.youtube.com/embed/XyflT8aZLyM'},
 ];
 
   function createWidget(req, res) {
@@ -33,6 +33,7 @@ module.exports = function(app) {
   }
 
   function findAllWidgetsForPage(req, res) {
+    console.log("it is here!");
     var pageId = req.params['pageId'];
     const resultSet = [];
     for ( const i in widgets) {

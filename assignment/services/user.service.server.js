@@ -3,6 +3,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var bcrypt = require("bcrypt-nodejs");
 
+// get clientID from facebook developers site, setting up Facebook login first with callbackURL
 var facebookConfig = {
   clientID     : '213029699464115',
   clientSecret : 'fced8daecb2a4ffb57b3371560d5296b',
@@ -153,14 +154,6 @@ module.exports = function (app) {
       )
   }
 
-  //app.get("/api/user", findUsers);
-
-  // var users = [
-  //   {_id: "123", username: "alice",    password: "alice",    firstName: "Alice",  lastName: "Wonderland", email: 'alice@123.com'  },
-  //   {_id: "234", username: "bob",      password: "bob",      firstName: "Bob",    lastName: "Marley", email: 'bob@123.com'  },
-  //   {_id: "345", username: "charly",   password: "charly",   firstName: "Charly", lastName: "Garcia", email: 'charly@123.com'  },
-  //   {_id: "456", username: "jannunzi", password: "jannunzi", firstName: "Jose",   lastName: "Annunzi", email: 'jannunzi@123.com' }
-  // ];
 
   function createUser(req, res){
     var user = req.body;
